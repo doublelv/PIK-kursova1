@@ -165,7 +165,9 @@ void PrintAllRepNums(int array[], int size)
     printf("Repeated Numbers: %d\n", RepNumsCount);
     if (RepNumsCount != 0)
     {
-        int RepesatingNumbers[RepNumsCount][2];
+        int** RepesatingNumbers = (int**)malloc(RepNumsCount * sizeof(int));
+        for (int i = 0; i < RepNumsCount; i++){RepesatingNumbers[i] = (int*)malloc(2*sizeof(int));}
+        
         int j = 0;
         for (int i = 0; i < RepNumsCount; i++)
         {
