@@ -1,7 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <malloc.h>
-#include <time.h>
+#include<malloc.h>
+#include<time.h>
+#include<conio.h>
+#include<windows.h>
+#include<stdio.h>
+#include<ctype.h>
 int InitializeArraySize();
 void FillArrayWithRand(int* array, int size);
 int GetRandomNumber(int min_number, int max_number);
@@ -13,34 +17,57 @@ int partition(int array[], int low, int high);
 void swap(int *one, int* two);
 int GetRepNumsCount(int arr[], int size);
 void PrintAllRepNums(int array[], int size);
+void menu();
+void arrowHere(int realPosition, int arrowPosition);
 
 int main()
 {
     //random number seed for random numbers in array
     srand(time(0));
-    //InitialArray = first array, that user fills
-    //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
-    int InitialArraySize, SecondArraySize;
-    InitialArraySize = InitializeArraySize();
-    int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
-    FillArrayWithRand(InitialArray, InitialArraySize);
-    PrintArray(InitialArray, InitialArraySize);
+    //text menu for choices
+    int choice = 0;
+    choice_goto:
+    printf("What would you want to do?\n1-Array work\n2-Exit\n");
+    scanf("%d", &choice);
+    switch (choice)
+    {
+        case 1:
+        {
+            //InitialArray = first array, that user fills
+            //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
+            int InitialArraySize, SecondArraySize;
+            InitialArraySize = InitializeArraySize();
+            int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
+            FillArrayWithRand(InitialArray, InitialArraySize);
+            PrintArray(InitialArray, InitialArraySize);
+            SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
+            printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
+            int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
+            CopyArrays(InitialArray, SecondArray, SecondArraySize);
+            printf("---------\nNew Array:\n");
+            PrintArray(SecondArray, SecondArraySize);
+            printf("---------\nSorted New Array:\n");
+            quickSort(SecondArray, 0, SecondArraySize - 1);
+            PrintArray(SecondArray,SecondArraySize);
+            printf("----------\n");
+            PrintAllRepNums(SecondArray,SecondArraySize);
+            break;
+        }
+        case 2:
+            break;
+        case 3:
+        {
+            break;
+        }
+        default:
+        {
+            printf("Invalid choice!\n\n");
+            goto choice_goto;
+            break;
+        }
+    }
 
-    SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
-    printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
-    
-    int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
-    CopyArrays(InitialArray, SecondArray, SecondArraySize);
-    printf("---------\nNew Array:\n");
-    PrintArray(SecondArray, SecondArraySize);
-
-    printf("---------\nSorted New Array:\n");
-    quickSort(SecondArray, 0, SecondArraySize - 1);
-    PrintArray(SecondArray,SecondArraySize);
-    printf("----------\n");
-
-    PrintAllRepNums(SecondArray,SecondArraySize);
-    
+    return 0;
 }
 
 int InitializeArraySize()
@@ -57,6 +84,7 @@ int InitializeArraySize()
     }
     return size;
 }
+
 void FillArrayWithRand(int* array, int size)
 {
     //Fills array with random numbers
@@ -65,12 +93,14 @@ void FillArrayWithRand(int* array, int size)
         array[i] = GetRandomNumber(0, 100);
     }
 }
+
 int GetRandomNumber(int min_number, int max_number)
 {
     //Generates a random number
     int number = (rand() % (max_number + 1 - min_number )) + min_number;
     return number;
 }
+
 void PrintArray(int array[], int size)
 {
     //Prints array
@@ -79,6 +109,7 @@ void PrintArray(int array[], int size)
 		printf("[%d] = %d\n", i, array[i]);
 	}
 }
+
 int GetMinIndex(int array[], int size)
 {
     //Returns the index of the min number in array
@@ -94,6 +125,7 @@ int GetMinIndex(int array[], int size)
     }
     return index;
 }
+
 void CopyArrays(int* array1, int* array2, int sizeOfSmallerArray)
 {
     //Copies the elements from array1 to array2 (array2 MUST BE THE SAME SIZE OF SMALLER THAN array1)
@@ -113,6 +145,7 @@ void quickSort(int array[], int low, int high)
         quickSort(array, pi+1, high);
     }
 }
+
 int partition(int array[], int low, int high)
 {
     //Teruns the pivot for quickSort
@@ -129,6 +162,7 @@ int partition(int array[], int low, int high)
     swap(&array[i+1], &array[high]);
     return (i+1);
 }
+
 void swap(int *one, int* two)
 {
     //swaps the values of 'one' and 'two'
