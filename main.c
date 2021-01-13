@@ -2,10 +2,7 @@
 #include<stdlib.h>
 #include<malloc.h>
 #include<time.h>
-#include<conio.h>
-#include<windows.h>
 #include<stdio.h>
-#include<ctype.h>
 int InitializeArraySize();
 void FillArrayWithRand(int* array, int size);
 int GetRandomNumber(int min_number, int max_number);
@@ -17,8 +14,7 @@ int partition(int array[], int low, int high);
 void swap(int *one, int* two);
 int GetRepNumsCount(int arr[], int size);
 void PrintAllRepNums(int array[], int size);
-void menu();
-void arrowHere(int realPosition, int arrowPosition);
+void ArrayWorkWithRandomNumbers();
 
 int main()
 {
@@ -26,47 +22,77 @@ int main()
     srand(time(0));
     //text menu for choices
     int choice = 0;
-    choice_goto:
-    printf("What would you want to do?\n1-Array work\n2-Exit\n");
+    main_menu:
+    printf("\nWhat would you want to do?\n1-Array work\n2-Exit\n");
     scanf("%d", &choice);
     switch (choice)
     {
         case 1:
         {
-            //InitialArray = first array, that user fills
-            //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
-            int InitialArraySize, SecondArraySize;
-            InitialArraySize = InitializeArraySize();
-            int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
-            FillArrayWithRand(InitialArray, InitialArraySize);
-            PrintArray(InitialArray, InitialArraySize);
-            SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
-            printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
-            int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
-            CopyArrays(InitialArray, SecondArray, SecondArraySize);
-            printf("---------\nNew Array:\n");
-            PrintArray(SecondArray, SecondArraySize);
-            printf("---------\nSorted New Array:\n");
-            quickSort(SecondArray, 0, SecondArraySize - 1);
-            PrintArray(SecondArray,SecondArraySize);
-            printf("----------\n");
-            PrintAllRepNums(SecondArray,SecondArraySize);
+            secondmenu:;
+            int secondChoice = 0;
+            printf("\nWhat would you want to do?\n1-Create an array \n2-Open an array\n3-Back\n");
+            scanf("%d", &secondChoice);
+            switch (secondChoice)
+            {
+            case 1:
+            //Create an aray:
+                randomOrManualChoice:;
+                int randomOrManual = 0;
+                printf("\nChoose:\n1-Random Numbers\n2-Manual mode\n3-Back\n");
+                scanf("%d", &randomOrManual);
+                switch (randomOrManual)
+                {
+                case 1:
+                //random numbers array
+                    ArrayWorkWithRandomNumbers();
+                    int save;
+                    printf("\nWould you like to Save the array?\n1-Yes\n2-No(Exit to Main Menu)\n");
+                    scanf("%d", &save);
+                    if (save == 1)
+                    {
+                        
+                    }
+                    
+                    break;
+                case 2:
+                //TODO Manual Mode
+                    break;
+                case 3:
+                //go to back(to second menu)
+                    goto secondmenu;
+                    break;
+                default:
+                    printf("Invalid choice!\n\n");
+                    goto randomOrManualChoice;
+                    break;
+                }
+
+                break;
+            case 2:
+                //TODO Opening an array from file
+                break;
+            case 3:
+            //Back (main menu)
+                goto main_menu;
+                break;
+            default:
+            printf("Invalid choice!\n\n");
+                goto secondmenu;
+                break;
+            }
+
             break;
         }
         case 2:
             break;
-        case 3:
-        {
-            break;
-        }
         default:
         {
             printf("Invalid choice!\n\n");
-            goto choice_goto;
+            goto main_menu;
             break;
         }
     }
-
     return 0;
 }
 
@@ -220,4 +246,26 @@ void PrintAllRepNums(int array[], int size)
             printf("%d is repeated %d times\n",RepesatingNumbers[i][0], RepesatingNumbers[i][1]);
         }
     }
+}
+
+void ArrayWorkWithRandomNumbers()
+{
+    //InitialArray = first array, that user fills
+        //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
+        int InitialArraySize, SecondArraySize;
+        InitialArraySize = InitializeArraySize();
+        int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
+        FillArrayWithRand(InitialArray, InitialArraySize);
+        PrintArray(InitialArray, InitialArraySize);
+        SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
+        printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
+        int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
+        CopyArrays(InitialArray, SecondArray, SecondArraySize);
+        printf("---------\nNew Array:\n");
+        PrintArray(SecondArray, SecondArraySize);
+        printf("---------\nSorted New Array:\n");
+        quickSort(SecondArray, 0, SecondArraySize - 1);
+        PrintArray(SecondArray,SecondArraySize);
+        printf("----------\n");
+        PrintAllRepNums(SecondArray,SecondArraySize);
 }
