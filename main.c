@@ -380,20 +380,22 @@ void SaveArray(int array[], int size)
 
 void EditArray(int* array, int size)
 {
-    int ChangeChoice, IndexToEdit;
+    int ChangeChoiceInFunc = 1;
+    int IndexToEditinFunc = 0;
     do
     {
         EnteringIndexForEditing:
-        printf("What index whould you like to Edit?\n");
-        scanf("$d", &IndexToEdit);
-        if (IndexToEdit >=0 && IndexToEdit <= size)
+        printf("What index whould you like to Edit? ");
+        //skipva tozi scanf
+        scanf("%d", &IndexToEditinFunc);
+        if (IndexToEditinFunc >=0 && IndexToEditinFunc < size)
         {
-            printf("InitialArray[%d] = ", IndexToEdit);
-            scanf("%d", &array[IndexToEdit]);
+            printf("InitialArray[%d] = ", IndexToEditinFunc);
+            scanf("%d", &array[IndexToEditinFunc]);
             editchoice:
-            printf("Change another number?(1/0) ");
-            scanf("%d", &ChangeChoice);
-            if (ChangeChoice != 1 || ChangeChoice != 0)
+            printf("Change another number?(1/0)\n1-Yes\n0-No\n");
+            scanf("%d", &ChangeChoiceInFunc);
+            if ( !(ChangeChoiceInFunc == 1 || ChangeChoiceInFunc == 0) )
             {
                 printf("Invalid choice!\n");
                 goto editchoice;
@@ -404,5 +406,5 @@ void EditArray(int* array, int size)
             printf("Invalid index!\n");
             goto EnteringIndexForEditing;
         }
-    }while(ChangeChoice == 1);
+    }while(ChangeChoiceInFunc == 1);
 }
