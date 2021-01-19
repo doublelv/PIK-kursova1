@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<malloc.h>
 #include<time.h>
-#include<stdio.h>
 int InitializeArraySize();
 void FillArrayWithRand(int* array, int size);
 int GetRandomNumber(int min_number, int max_number);
@@ -15,6 +14,9 @@ void swap(int *one, int* two);
 int GetRepNumsCount(int arr[], int size);
 void PrintAllRepNums(int array[], int size);
 void ArrayWorkWithRandomNumbers();
+void ArrayWorkWithManualNumbers();
+void SaveArray(int array[], int size);
+void EditArray(int* array, int size);
 
 int main()
 {
@@ -46,17 +48,11 @@ int main()
                 case 1:
                 //random numbers array
                     ArrayWorkWithRandomNumbers();
-                    int save;
-                    printf("\nWould you like to Save the array?\n1-Yes\n2-No(Exit to Main Menu)\n");
-                    scanf("%d", &save);
-                    if (save == 1)
-                    {
-                        
-                    }
-                    
+                    goto main_menu;
                     break;
                 case 2:
                 //TODO Manual Mode
+                    ArrayWorkWithManualNumbers();
                     break;
                 case 3:
                 //go to back(to second menu)
@@ -252,11 +248,27 @@ void ArrayWorkWithRandomNumbers()
 {
     //InitialArray = first array, that user fills
         //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
-        int InitialArraySize, SecondArraySize;
+        int InitialArraySize, SecondArraySize, EditChoice;
         InitialArraySize = InitializeArraySize();
         int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
         FillArrayWithRand(InitialArray, InitialArraySize);
         PrintArray(InitialArray, InitialArraySize);
+        printf("Before continuing, would you want to edit the array?\n1-Yes\n2-No\n");
+        editchoice_manual:
+        scanf("%d", & EditChoice);
+        if (EditChoice == 1)
+        {
+            EditArray(InitialArray, InitialArraySize);
+        }
+        else if (EditChoice == 2)
+        {
+        }
+        else
+        {
+            printf("Invalid choice!\nEnter 1 or 2\n");
+            goto editchoice_manual;
+        }
+        PrintArray(InitialArray, InitialArraySize);    
         SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
         printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
         int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
@@ -268,4 +280,129 @@ void ArrayWorkWithRandomNumbers()
         PrintArray(SecondArray,SecondArraySize);
         printf("----------\n");
         PrintAllRepNums(SecondArray,SecondArraySize);
+        int save = 0;
+        save_option:
+        printf("\nWould you like to Save the array?\n1-Yes\n2-No(Exit to Main Menu)\n");
+        scanf("%d", &save);
+        if (save == 1)
+        {
+            //Todo - save
+            SaveArray(SecondArray,SecondArraySize);
+        }
+        else if (save == 2)
+        {
+            exit;
+        }
+        else
+        {
+            printf("Invalid choice!\n");
+            goto save_option;
+        }
+}
+
+void ArrayWorkWithManualNumbers()
+{
+    int InitialArraySize, SecondArraySize, EditChoice;
+    InitialArraySize = InitializeArraySize();
+    int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
+    for (int i = 0; i < InitialArraySize; i++)
+    {
+        printf("Enter number[%d] :", i);
+        scanf("%d", &InitialArray[i]);
+    }
+    PrintArray(InitialArray, InitialArraySize);
+    printf("Before continuing, would you want to edit the array?\n1-Yes\n2-No\n");
+    editchoice_manual:
+    scanf("%d", & EditChoice);
+    if (EditChoice == 1)
+    {
+        EditArray(InitialArray, InitialArraySize);
+    }
+    else if (EditChoice == 2)
+    {
+    }
+    else
+    {
+        printf("Invalid choice!\nEnter 1 or 2\n");
+        goto editchoice_manual;
+    }
+    PrintArray(InitialArray, InitialArraySize);
+    SecondArraySize = GetMinIndex(InitialArray, InitialArraySize);
+    printf("Min index is %d and InitialArray[%d] = %d\n", SecondArraySize, SecondArraySize, InitialArray[SecondArraySize]);
+    int* SecondArray = (int*) malloc(SecondArraySize * sizeof(int));
+    CopyArrays(InitialArray, SecondArray, SecondArraySize);
+    printf("---------\nNew Array:\n");
+    PrintArray(SecondArray, SecondArraySize);
+    printf("---------\nSorted New Array:\n");
+    quickSort(SecondArray, 0, SecondArraySize - 1);
+    PrintArray(SecondArray,SecondArraySize);
+    printf("----------\n");
+    PrintAllRepNums(SecondArray,SecondArraySize);
+    int save = 0;
+    save_option:
+    printf("\nWould you like to Save the array?\n1-Yes\n2-No(Exit to Main Menu)\n");
+    scanf("%d", &save);
+    if (save == 1)
+    {
+        //Todo - save
+        SaveArray(SecondArray,SecondArraySize);
+    }
+    else if (save == 2)
+    {
+        exit;
+    }
+    else
+    {
+        printf("Invalid choice!\n");
+        goto save_option;
+    }
+}
+
+void SaveArray(int array[], int size)
+{
+    //saves array to an file
+    char name[64]; 
+	printf("Enter the name of the file to be created: "); 
+	//fgets(name, 64, stdin); 
+	scanf("%s", &name);
+    FILE* fptr;
+    fptr = fopen(name, "w"); 
+    for (int i = 0; i < size/4; i++)
+    {
+        for (int j = i*4; j < i*4 + 4; j++)
+        {
+            fprintf(fptr,"%d",array[j]);
+            if(j<i*4 + 3) { fprintf(fptr, " ");}
+        }
+        fprintf(fptr, "\n");
+    }  
+}
+
+void EditArray(int* array, int size)
+{
+    int ChangeChoice, IndexToEdit;
+    do
+    {
+        EnteringIndexForEditing:
+        printf("What index whould you like to Edit?\n");
+        scanf("$d", &IndexToEdit);
+        if (IndexToEdit >=0 && IndexToEdit <= size)
+        {
+            printf("InitialArray[%d] = ", IndexToEdit);
+            scanf("%d", &array[IndexToEdit]);
+            editchoice:
+            printf("Change another number?(1/0) ");
+            scanf("%d", &ChangeChoice);
+            if (ChangeChoice != 1 || ChangeChoice != 0)
+            {
+                printf("Invalid choice!\n");
+                goto editchoice;
+            }
+        }
+        else
+        {
+            printf("Invalid index!\n");
+            goto EnteringIndexForEditing;
+        }
+    }while(ChangeChoice == 1);
 }
