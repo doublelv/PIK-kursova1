@@ -20,9 +20,7 @@ void EditArray(int* array, int size);
 
 int main()
 {
-    //random number seed for random numbers in array
     srand(time(0));
-    //text menu for choices
     int choice = 0;
     main_menu:
     printf("\nWhat would you want to do?\n1-Array work\n2-Exit\n");
@@ -51,7 +49,6 @@ int main()
                     goto main_menu;
                     break;
                 case 2:
-                //TODO Manual Mode
                     ArrayWorkWithManualNumbers();
                     break;
                 case 3:
@@ -63,7 +60,6 @@ int main()
                     goto randomOrManualChoice;
                     break;
                 }
-
                 break;
             case 2:
                 //TODO Opening an array from file
@@ -77,7 +73,6 @@ int main()
                 goto secondmenu;
                 break;
             }
-
             break;
         }
         case 2:
@@ -246,8 +241,6 @@ void PrintAllRepNums(int array[], int size)
 
 void ArrayWorkWithRandomNumbers()
 {
-    //InitialArray = first array, that user fills
-        //SecondArray = the numbers from InitialArray[0] to min number of InitialArray
         int InitialArraySize, SecondArraySize, EditChoice;
         InitialArraySize = InitializeArraySize();
         int* InitialArray = (int*) malloc(InitialArraySize * sizeof(int));
@@ -281,12 +274,11 @@ void ArrayWorkWithRandomNumbers()
         printf("----------\n");
         PrintAllRepNums(SecondArray,SecondArraySize);
         int save = 0;
-        save_option:
+        save_option_auto:
         printf("\nWould you like to Save the array?\n1-Yes\n2-No(Exit to Main Menu)\n");
         scanf("%d", &save);
         if (save == 1)
         {
-            //Todo - save
             SaveArray(SecondArray,SecondArraySize);
         }
         else if (save == 2)
@@ -296,7 +288,7 @@ void ArrayWorkWithRandomNumbers()
         else
         {
             printf("Invalid choice!\n");
-            goto save_option;
+            goto save_option_auto;
         }
 }
 
@@ -344,7 +336,6 @@ void ArrayWorkWithManualNumbers()
     scanf("%d", &save);
     if (save == 1)
     {
-        //Todo - save
         SaveArray(SecondArray,SecondArraySize);
     }
     else if (save == 2)
@@ -363,11 +354,10 @@ void SaveArray(int array[], int size)
     //saves array to an file
     char name[64]; 
 	printf("Enter the name of the file to be created: "); 
-	//fgets(name, 64, stdin); 
 	scanf("%s", &name);
     FILE* fptr;
     fptr = fopen(name, "w"); 
-    for (int i = 0; i < size/4; i++)
+    for (int i = 0; i <= size/4; i++)
     {
         for (int j = i*4; j < i*4 + 4; j++)
         {
@@ -386,7 +376,6 @@ void EditArray(int* array, int size)
     {
         EnteringIndexForEditing:
         printf("What index whould you like to Edit? ");
-        //skipva tozi scanf
         scanf("%d", &IndexToEditinFunc);
         if (IndexToEditinFunc >=0 && IndexToEditinFunc < size)
         {
